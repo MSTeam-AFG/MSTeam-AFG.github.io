@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AFG下载引导站</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2980, #26d0ce);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* 背景装饰元素 */
+        .decoration {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        .decoration:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: -100px;
+            right: -100px;
+        }
+
+        .decoration:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            bottom: 50px;
+            left: -50px;
+        }
+
+        .decoration:nth-child(3) {
+            width: 150px;
+            height: 150px;
+            bottom: 200px;
+            right: 30%;
+        }
+
+        /* 顶部标题区域 */
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .logo i {
+            color: #4DFFFF;
+            text-shadow: 0 0 10px rgba(77, 255, 255, 0.7);
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            line-height: 1.6;
+        }
+
+        /* 时间线容器 */
+        .timeline-container {
+            max-width: 800px;
+            margin: 40px auto;
+            position: relative;
+            padding: 20px 0;
+        }
+
+        /* 中心垂直线 */
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(to bottom, #4DFFFF, #1a2980);
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(77, 255, 255, 0.5);
+        }
+
+        /* 步骤容器 */
+        .steps {
+            position: relative;
+            z-index: 2;
+        }
+
+        .step {
+            display: flex;
+            margin-bottom: 70px;
+            perspective: 1000px;
+        }
+
+        .step:last-child {
+            margin-bottom: 20px;
+        }
+
+        /* 步骤内容 */
+        .step-content {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            width: calc(50% - 60px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.4s ease;
+        }
+
+        .step-content:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .step:nth-child(odd) .step-content {
+            margin-left: auto;
+        }
+
+        .step:nth-child(even) .step-content {
+            margin-right: auto;
+        }
+
+        /* 步骤圆圈 */
+        .step-circle {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4DFFFF, #1a2980);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.1), 
+                        0 0 20px rgba(77, 255, 255, 0.8);
+            z-index: 3;
+            transition: all 0.3s ease;
+        }
+
+        .step:hover .step-circle {
+            transform: translateX(-50%) scale(1.1);
+            box-shadow: 0 0 0 12px rgba(255, 255, 255, 0.15), 
+                        0 0 30px rgba(77, 255, 255, 1);
+        }
+
+        /* 步骤标题和内容 */
+        .step h2 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #4DFFFF;
+        }
+
+        .step p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        /* 下载按钮 */
+        .download-btn {
+            display: inline-block;
+            background: linear-gradient(to right, #00c9ff, #92fe9d);
+            color: #1a2980;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(to right, #00a2ff, #7cff8a);
+        }
+
+        /* 页脚 */
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-top: 20px;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .timeline-line {
+                left: 30px;
+            }
+
+            .step {
+                margin-left: 70px;
+                margin-bottom: 50px;
+            }
+
+            .step-content {
+                width: 100%;
+            }
+
+            .step-circle {
+                left: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 背景装饰元素 -->
+    <div class="decoration"></div>
+    <div class="decoration"></div>
+    <div class="decoration"></div>
+
+    <!-- 标题区域 -->
+    <div class="header">
+        <div class="logo">
+            <i class="fas fa-cloud-download-alt"></i>
+            AFG下载引导站
+        </div>
+        <h1>免费下载AFG全机型地景指引</h1>
+        <p class="subtitle">按照以下步骤无root下载</p>
+    </div>
+
+    <!-- 时间线步骤 -->
+    <div class="timeline-container">
+        <div class="timeline-line"></div>
+        <div class="steps">
+            <!-- 步骤1 -->
+            <div class="step">
+                <div class="step-circle">1</div>
+                <div class="step-content">
+                    <h2>下载游戏本体</h2>
+                    <p>前往 光环助手 搜索 全球航空飞行 下载安装。</p>
+                    <a href="https://m.ghzs.com/android" class="download-btn">下载光环助手</a>
+                </div>
+            </div>
+
+            <!-- 步骤2 -->
+            <div class="step">
+                <div class="step-circle">2</div>
+                <div class="step-content">
+                    <h2>去国外下载机型（玩笑）</h2>
+                    <p>连接加速器后进入游戏点击右侧机型选择页面把所有飞机下载完，通常需要某v开头的东西，因为众所周知的原因，我不提供，但光环助手出了一个3小时免费加速，可以试试。</p>
+                </div>
+            </div>
+
+            <!-- 步骤3 -->
+            <div class="step">
+                <div class="step-circle">3</div>
+                <div class="step-content">
+                    <h2>在下载地景前获得相关权限</h2>
+                    <p>下载Shizuku根据教程选用无线调试，并在 已授权的应用 中开启MT管理器。</p>
+                    <a href="https://apt.izzysoft.de/fdroid/repo/moe.shizuku.privileged.api_1086.apk" class="download-btn">下载Shizuku</a>
+                    <a href="https://pan.mt2.cn/mt/MT2.19.0.apk" class="download-btn">下载MT管理器</a>
+                </div>
+            </div>
+
+            <!-- 步骤4 -->
+            <div class="step">
+                <div class="step-circle">4</div>
+                <div class="step-content">
+                    <h2>下载安装地景</h2>
+                    <p>我整理了免费的AFG地景、机场、建筑、地图插件在 123云盘（大容量不限速）上，供大家下载。安装路径（将文件复制到里面，而非移动，事后再把/storage/emulated/0/123云盘/ 目录下的相关文件删掉就行）： /storage/emulated/0/Android
+                    /data/com.aerofly.aeroflyfsg1/files/</p>
+                    <a href="https://www.123865.com/s/TLgfjv-A6sZv" class="download-btn">下载插件</a>
+                    <a href="https://www.123pan.com/Downloadclient?type=App" class="download-btn">下载123云盘（选Android）</a>
+                </div>
+            </div>
+
+            <!-- 步骤5 -->
+            <div class="step">
+                <div class="step-circle">5</div>
+                <div class="step-content">
+                    <h2>恭喜你成功了</h2>
+                    <p>恭喜你成功下载到了心心念念的AFG，如果遇到所有飞机都变成塞斯纳的话，在谷歌商店里面登录上谷歌账号就行了，因为我也遇到过QWQ</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <div class="footer">
+        <p>插件均来自ACC(flyoverasia)，我只是个整合的，感谢ACC</p>
+    </div>
+
+    <script>
+        // 添加滚动动画效果
+        document.addEventListener('DOMContentLoaded', function() {
+            const steps = document.querySelectorAll('.step');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            steps.forEach(step => {
+                step.style.opacity = 0;
+                step.style.transform = 'translateY(50px)';
+                step.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(step);
+            });
+            
+            // 添加按钮点击效果
+            const buttons = document.querySelectorAll('.download-btn');
+            buttons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    if(this.href === '#') {
+                        e.preventDefault();
+                        // 按钮动画效果
+                        this.style.transform = 'scale(0.95)';
+                        setTimeout(() => {
+                            this.style.transform = '';
+                        }, 200);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
